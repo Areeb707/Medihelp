@@ -1,0 +1,79 @@
+[
+  {
+    "id": "460a7484-55a0-4fae-b148-fa2fa8b8bf61",
+    "patient_id": "fb94b189-47e9-4a7c-be78-08ba90ffdd6d",
+    "patient_name": "Arjun Nair",
+    "type": "warning",
+    "title": "Stage 1 Essential Hypertension & Elevated BP",
+    "desc": "Blood pressure recorded at 148/92 mmHg with Obesity (BMI 30.8 kg/m\u00b2) and Dyslipidemia (LDL 145 mg/dL). Monitor cardiovascular parameters closely.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T16:11:49.200260"
+  },
+  {
+    "id": "6f33ceff-7384-4a65-881f-50d30f7cab4e",
+    "patient_id": "fb94b189-47e9-4a7c-be78-08ba90ffdd6d",
+    "patient_name": "Arjun Nair",
+    "type": "warning",
+    "title": "Poorly Controlled Diabetes & Glycemic Risk",
+    "desc": "HbA1c level recorded at 8.1% (poorly controlled). High risk of diabetic complications. Co-prescribed Metformin + Glimepiride increases hypoglycemia risk.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T16:11:49.200260"
+  },
+  {
+    "id": "4e4e2b66-ee12-4451-8ced-c953b9c85bd3",
+    "patient_id": "fb94b189-47e9-4a7c-be78-08ba90ffdd6d",
+    "patient_name": "Arjun Nair",
+    "type": "critical",
+    "title": "Severe Penicillin Allergy Contraindication",
+    "desc": "Patient has documented severe allergy to Penicillin & Beta-Lactam antibiotics. Avoid prescribing Amoxicillin, Ampicillin, or Penicillin derivatives.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T16:11:49.200260"
+  },
+  {
+    "id": "711d218a-0847-424b-b996-02cf04c51475",
+    "patient_id": "d485f267-1a9e-4850-9394-a1df5fc373e2",
+    "patient_name": "rohit",
+    "type": "warning",
+    "title": "Clinical Risk Detected: Prediabetes, Dyslipidemia, Vitamin ",
+    "desc": "Updated clinical risk profile: Prediabetes, Dyslipidemia, Vitamin D Deficiency. Review medication regimen and lab trends.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T15:30:44.656859"
+  },
+  {
+    "id": "d9bba493-fe4e-4e66-a578-31be67a7add2",
+    "patient_id": "b5b9da70-c752-4ae4-82e6-de9e4baa66b4",
+    "patient_name": "Ananya Shah",
+    "type": "warning",
+    "title": "Clinical Risk Detected: High",
+    "desc": "Updated clinical risk profile: High. Review medication regimen and lab trends.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T15:30:43.536881"
+  },
+  {
+    "id": "8b656d06-30d4-445e-a1ac-10bded1fe4cd",
+    "patient_id": "b5b9da70-c752-4ae4-82e6-de9e4baa66b4",
+    "patient_name": "Ananya Shah",
+    "type": "warning",
+    "title": "Abnormal HbA1c Level (6.8%)",
+    "desc": "HbA1c value recorded at 6.8%. Trend: stable.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T15:30:42.623771"
+  },
+  {
+    "id": "124c9fdb-b8d3-4288-b9d2-11bc1ae073e4",
+    "patient_id": "d485f267-1a9e-4850-9394-a1df5fc373e2",
+    "patient_name": "rohit",
+    "type": "warning",
+    "title": "Abnormal HbA1c Level (5.9 %)",
+    "desc": "HbA1c value recorded at 5.9 %. Trend: worsened.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-14T15:30:40.821097"
+  }
+]
