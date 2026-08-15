@@ -50,6 +50,7 @@ export const IconLock        = (p: P) => <C {...p}><rect width="18" height="11" 
 export const IconTrendingUp  = (p: P) => <I {...p} d={["M22 7 13.5 15.5 8.5 10.5 2 17","M16 7h6v6"]} />;
 export const IconCalendar    = (p: P) => <C {...p}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></C>;
 export const IconArrowRight  = (p: P) => <I {...p} d={["M5 12h14","M12 5l7 7-7 7"]} />;
+export const IconArrowLeft   = (p: P) => <I {...p} d={["M19 12H5","M12 19l-7-7 7-7"]} />;
 export const IconChevronRight= (p: P) => <I {...p} d="M9 18l6-6-6-6" />;
 export const IconCloud       = (p: P) => <C {...p}><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></C>;
 export const IconInfo        = (p: P) => <C {...p}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></C>;
@@ -57,9 +58,15 @@ export const IconTrash       = (p: P) => <C {...p}><path d="M3 6h18"/><path d="M
 export const IconEye         = (p: P) => <C {...p}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></C>;
 export const IconToggleLeft  = (p: P) => <C {...p}><rect width="20" height="12" x="2" y="6" rx="6" ry="6"/><circle cx="8" cy="12" r="2"/></C>;
 export const IconToggleRight = (p: P) => <C {...p}><rect width="20" height="12" x="2" y="6" rx="6" ry="6"/><circle cx="16" cy="12" r="2"/></C>;
+export const IconGlobe       = (p: P) => <C {...p}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></C>;
 export const IconSun         = (p: P) => <C {...p}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></C>;
 export const IconKey         = (p: P) => <C {...p}><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></C>;
 export const IconCpu         = (p: P) => <C {...p}><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></C>;
 export const IconMessageCircle = (p: P) => <C {...p}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></C>;
 export const IconMessageSquare = (p: P) => <C {...p}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></C>;
 export const IconLogOut = (p: P) => <I {...p} d={["M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4","M16 17l5-5-5-5","M21 12H9"]} />;
+export const IconVolume2 = (p: P) => <C {...p}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></C>;
+export const IconHelpCircle = (p: P) => <C {...p}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></C>;
+export const IconChevronLeft = (p: P) => <I {...p} d="M15 18l-6-6 6-6" />;
+export const IconCheckCircle = (p: P) => <C {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></C>;
+

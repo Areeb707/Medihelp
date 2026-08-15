@@ -2,12 +2,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import { IconShare2 } from "@/components/Icons";
 import { api } from "@/lib/api";
 import { cacheGet, cacheSet } from "@/lib/cache";
 
 export default function MindmapPage() {
   const router  = useRouter();
+  const { t }     = useTranslation();
   const svgRef  = useRef<SVGSVGElement>(null);
   const [patient, setPatient] = useState<any>(null);
   const [data,    setData]    = useState<any>(null);
@@ -85,26 +87,36 @@ export default function MindmapPage() {
     return {...n, x:cx+r*Math.cos(angle), y:cy+r*Math.sin(angle)};
   });
 
+  const LEGEND_ITEMS = [
+    ["#00d4a0", t("legend_condition")],
+    ["#8b7ff5", t("legend_patient")],
+    ["#f0a030", t("legend_allergy")],
+    ["#4090e0", t("legend_lab_result")],
+    ["#50d4a0", t("legend_medication")],
+    ["#e05a3a", t("legend_episode")],
+    ["#8a9ab8", t("legend_entity")],
+  ];
+
   return (
     <div className="app-shell">
       <Sidebar/>
       <main className="main-area">
         <div className="page-header">
           <div>
-            <div className="text-[17px] font-bold text-white">Cognee Knowledge Graph</div>
+            <div className="text-[17px] font-bold text-white">{t("cognee_kg_title")}</div>
             <div className="text-[11px] text-ink-muted mt-0.5">
-              {displayPatient.name} · {nodes.length} entities · {edges.length} relationships
-              {cached && <span className="ml-2 text-teal">(cached)</span>}
+              {displayPatient.name} · {nodes.length} {t("entities_label")} · {edges.length} {t("relationships_label")}
+              {cached && <span className="ml-2 text-teal">{t("cached_label")}</span>}
             </div>
           </div>
           <div className="flex gap-2">
             <a href="https://platform.cognee.ai" target="_blank" rel="noreferrer"
               className="btn-secondary text-[11px] no-underline">
-              View in Cognee Cloud ↗
+              {t("view_in_cognee_cloud_link")}
             </a>
             <button onClick={()=>displayPatient.id && load(displayPatient.id)} disabled={loading}
               className="btn-secondary text-[11px]">
-              {loading?"Loading...":"Refresh"}
+              {loading ? t("loading") : t("refresh_btn")}
             </button>
           </div>
         </div>
@@ -113,7 +125,7 @@ export default function MindmapPage() {
           {loading && !data && (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <div className="w-8 h-8 rounded-full border-2 border-teal/20 border-t-teal animate-spin-slow"/>
-              <div className="text-[12px] text-ink-muted">Building knowledge graph from Cognee Cloud...</div>
+              <div className="text-[12px] text-ink-muted">{t("building_kg_loading")}</div>
             </div>
           )}
 
@@ -146,7 +158,7 @@ export default function MindmapPage() {
                         fontSize="8.5" fontWeight="600" fontFamily="Inter,system-ui">
                         {n.label?.replace(/_/g," ").slice(0,14)}
                       </text>
-                      {/* Type badge — only once */}
+                      {/* Type badge */}
                       <text x={n.x} y={n.y+9} textAnchor="middle" fill={n.color}
                         fontSize="7" fontFamily="Inter,system-ui" opacity="0.85">
                         {n.type}
@@ -180,8 +192,7 @@ export default function MindmapPage() {
 
               {/* Legend */}
               <div className="flex gap-3 flex-wrap">
-                {[["#00d4a0","Condition"],["#8b7ff5","Patient"],["#f0a030","Allergy"],
-                  ["#4090e0","Lab Result"],["#50d4a0","Medication"],["#e05a3a","Episode"],["#8a9ab8","Entity"]].map(([c,l])=>(
+                {LEGEND_ITEMS.map(([c,l])=>(
                   <div key={l} className="flex items-center gap-1.5 bg-bg-card border border-line rounded-lg px-2.5 py-1.5">
                     <span className="w-2 h-2 rounded-full flex-shrink-0" style={{background:c}}/>
                     <span className="text-[10px] text-ink-muted">{l}</span>

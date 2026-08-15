@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   IconSearch, IconPlus, IconUser, IconX, IconTrash,
   IconStethoscope, IconActivity, IconDatabase, IconArrowRight,
@@ -11,6 +12,7 @@ import { api } from "@/lib/api";
 
 export default function PatientListPage() {
   const router = useRouter();
+  const { t }    = useTranslation();
   const [patients,  setPatients]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(true);
   const [error,     setError]     = useState("");
@@ -82,10 +84,10 @@ export default function PatientListPage() {
   );
 
   const STATS = [
-    { v: patients.length,                                              l: "Total patients",  c: "#00d4a0", g: "linear-gradient(135deg,#001f17,#003d2e)" },
-    { v: patients.reduce((s:number,p:any)=>s+(p.docs?.length||0),0), l: "Docs ingested",   c: "#8b7ff5", g: "linear-gradient(135deg,#130f2e,#1a1650)" },
-    { v: patients.filter((p:any)=>p.alerts>0).length,                 l: "Active alerts",   c: "#e05a3a", g: "linear-gradient(135deg,#280e06,#350f05)" },
-    { v: patients.filter((p:any)=>(p.docs?.length||0)>0).length,      l: "With memory",     c: "#4090e0", g: "linear-gradient(135deg,#041525,#071e38)" },
+    { v: patients.length,                                              l: t("stat_total_patients"),  c: "#00d4a0", g: "linear-gradient(135deg,#001f17,#003d2e)" },
+    { v: patients.reduce((s:number,p:any)=>s+(p.docs?.length||0),0), l: t("stat_docs_ingested"),   c: "#8b7ff5", g: "linear-gradient(135deg,#130f2e,#1a1650)" },
+    { v: patients.filter((p:any)=>p.alerts>0).length,                 l: t("stat_active_alerts_list"),   c: "#e05a3a", g: "linear-gradient(135deg,#280e06,#350f05)" },
+    { v: patients.filter((p:any)=>(p.docs?.length||0)>0).length,      l: t("stat_with_memory"),     c: "#4090e0", g: "linear-gradient(135deg,#041525,#071e38)" },
   ];
 
   return (
@@ -94,20 +96,20 @@ export default function PatientListPage() {
       <main className="main-area">
         <div className="page-header">
           <div>
-            <h1 className="text-[17px] font-bold text-white">Patients</h1>
+            <h1 className="text-[17px] font-bold text-white">{t("patients_title")}</h1>
             <p className="text-[11px] text-ink-muted mt-0.5">
-              {patients.length} patients · Click to open Memory Hub
+              {patients.length} {t("click_to_open_hub")}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-3 py-2">
               <IconSearch size={13} className="text-ink-muted flex-shrink-0" />
-              <input placeholder="Search patients..." value={search}
+              <input placeholder={t("search_patients_placeholder")} value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="text-[12px] text-white w-44" />
+                className="text-[12px] text-white w-44 font-sans bg-transparent outline-none border-none" />
             </div>
             <button onClick={() => setModal(true)} className="btn-primary">
-              <IconPlus size={13} /> New patient
+              <IconPlus size={13} /> {t("new_patient_btn")}
             </button>
           </div>
         </div>
@@ -138,10 +140,10 @@ export default function PatientListPage() {
                 <IconUser size={22} className="text-ink-muted" />
               </div>
               <div className="text-[14px] font-semibold text-white mb-1">
-                {patients.length === 0 ? "No patients yet" : "No results"}
+                {patients.length === 0 ? t("no_patients_yet") : t("no_results")}
               </div>
               <div className="text-[12px] text-ink-muted">
-                {patients.length === 0 ? "Click 'New patient' to get started" : `No results for "${search}"`}
+                {patients.length === 0 ? t("click_new_patient_start") : `${t("no_results")} "${search}"`}
               </div>
             </div>
           ) : (
@@ -157,7 +159,7 @@ export default function PatientListPage() {
                     onClick={e => { e.stopPropagation(); setConfirmDel(p); }}
                     disabled={deleting === p.id}
                     className="absolute top-3 right-3 w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-dark hover:text-rose text-ink-muted"
-                    title="Delete patient and Cognee memory">
+                    title={t("delete_patient_btn_label")}>
                     {deleting===p.id
                       ? <div className="w-4 h-4 rounded-full border-2 border-rose/20 border-t-rose animate-spin-slow" />
                       : <IconTrash size={13} />
@@ -189,18 +191,18 @@ export default function PatientListPage() {
 
                   {/* Stats */}
                   <div className="flex gap-4 mb-3 text-[10px] text-ink-muted">
-                    <span className="flex items-center gap-1"><IconDatabase size={11} /> {p.docs?.length||0} docs</span>
+                    <span className="flex items-center gap-1"><IconDatabase size={11} /> {p.docs?.length||0} {t("stat_documents")}</span>
                   </div>
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-3 border-t border-line">
                     <button onClick={e=>{e.stopPropagation();selectPatient(p);}}
                       className="btn-primary py-1.5 text-[11px] flex-1 justify-center">
-                      <IconDatabase size={12} /> Memory Hub
+                      <IconDatabase size={12} /> {t("memory_hub")}
                     </button>
                     <button onClick={e=>{e.stopPropagation();selectPatient(p);router.push("/patients/chat");}}
                       className="btn-secondary py-1.5 text-[11px] flex-1 justify-center">
-                      <IconStethoscope size={12} /> AI Doctor
+                      <IconStethoscope size={12} /> {t("ai_doctor")}
                     </button>
                     <button onClick={e=>{e.stopPropagation();selectPatient(p);router.push("/patients/brief");}}
                       className="btn-secondary py-1.5 text-[11px] px-3">
@@ -223,46 +225,48 @@ export default function PatientListPage() {
             style={{ background:"#0c1018" }} onClick={e=>e.stopPropagation()}>
             <div className="flex items-center justify-between mb-5">
               <div>
-                <div className="text-[15px] font-semibold text-white">Add new patient</div>
-                <div className="text-[11px] text-ink-muted mt-0.5">Cognee dataset created on first PDF upload</div>
+                <div className="text-[15px] font-semibold text-white">{t("add_new_patient_title")}</div>
+                <div className="text-[11px] text-ink-muted mt-0.5">{t("cognee_dataset_created_note")}</div>
               </div>
               <button onClick={()=>setModal(false)} className="btn-ghost p-1.5 rounded-lg"><IconX size={16} /></button>
             </div>
             <div className="flex flex-col gap-3">
               <div>
-                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Full name</label>
+                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("full_name_label")}</label>
                 <div className="flex items-center gap-2.5 bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 focus-within:border-teal/50 transition-all">
                   <IconUser size={14} className="text-ink-muted flex-shrink-0" />
                   <input value={newName} onChange={e=>setNewName(e.target.value)}
-                    placeholder="e.g. Rahul Sharma" className="flex-1 text-[13px] text-white" />
+                    placeholder="e.g. Rahul Sharma" className="flex-1 text-[13px] text-white bg-transparent outline-none border-none" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Age</label>
+                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("age_label")}</label>
                   <input value={newAge} onChange={e=>setNewAge(e.target.value)} placeholder="45" type="number"
-                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white" />
+                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white outline-none" />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Gender</label>
+                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("gender_label")}</label>
                   <select value={newGender} onChange={e=>setNewGender(e.target.value)}
-                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer">
-                    {["Male","Female","Other"].map(g=><option key={g}>{g}</option>)}
+                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer outline-none">
+                    <option value="Male">{t("gender_male")}</option>
+                    <option value="Female">{t("gender_female")}</option>
+                    <option value="Other">{t("gender_other")}</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Blood group</label>
+                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("blood_group_label")}</label>
                 <select value={newBlood} onChange={e=>setNewBlood(e.target.value)}
-                  className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer">
+                  className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer outline-none">
                   {["A+","A-","B+","B-","O+","O-","AB+","AB-"].map(b=><option key={b}>{b}</option>)}
                 </select>
               </div>
               <div className="flex gap-2 mt-1">
-                <button onClick={()=>setModal(false)} className="btn-secondary flex-1 justify-center py-2.5">Cancel</button>
+                <button onClick={()=>setModal(false)} className="btn-secondary flex-1 justify-center py-2.5">{t("cancel")}</button>
                 <button onClick={createPatient} disabled={creating}
                   className="btn-primary flex-1 justify-center py-2.5">
-                  {creating?"Creating...":"Create patient"}
+                  {creating?t("creating_patient_btn"):t("create_patient_btn")}
                 </button>
               </div>
             </div>
@@ -282,22 +286,21 @@ export default function PatientListPage() {
                 <IconAlertTriangle size={18} className="text-rose" />
               </div>
               <div>
-                <div className="text-[14px] font-semibold text-white">Delete patient?</div>
+                <div className="text-[14px] font-semibold text-white">{t("delete_patient_memory_title")}</div>
                 <div className="text-[11px] text-ink-muted mt-0.5">{confirmDel.name}</div>
               </div>
             </div>
             <p className="text-[12px] text-ink-muted leading-relaxed mb-5">
-              This will permanently delete <strong className="text-white">{confirmDel.name}</strong> and
-              all their Cognee Cloud memory — knowledge graph, documents, chat history.
-              <strong className="text-rose"> This cannot be undone.</strong>
+              {t("delete_patient_memory_desc")} (<strong className="text-white">{confirmDel.name}</strong>).
+              <strong className="text-rose"> {t("action_cannot_be_undone")}</strong>
             </p>
             <div className="flex gap-2">
               <button onClick={()=>setConfirmDel(null)} className="btn-secondary flex-1 justify-center py-2.5">
-                Cancel
+                {t("cancel")}
               </button>
               <button onClick={()=>deletePatient(confirmDel)}
                 className="btn-danger flex-1 justify-center py-2.5">
-                <IconTrash size={13} /> Delete + forget
+                <IconTrash size={13} /> {t("delete_patient_btn_label")}
               </button>
             </div>
           </div>

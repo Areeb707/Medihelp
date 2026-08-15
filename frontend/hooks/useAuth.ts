@@ -37,8 +37,9 @@ export function useAuth() {
   const logout = () => {
     localStorage.removeItem(DOCTOR_KEY);
     localStorage.removeItem(PATIENT_KEY);
+    localStorage.removeItem("medhelp_auth_token");
     setDoctor(null);
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const isLoggedIn = !!doctor;

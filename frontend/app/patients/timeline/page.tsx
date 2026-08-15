@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import { IconClock } from "@/components/Icons";
 import { api } from "@/lib/api";
 
@@ -17,6 +18,7 @@ const TYPE_COLORS: Record<string, string> = {
 
 export default function TimelinePage() {
   const router = useRouter();
+  const { t }    = useTranslation();
   const [patient, setPatient] = useState<any>(null);
   const [events,  setEvents]  = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -75,14 +77,14 @@ export default function TimelinePage() {
       <main className="main-area">
         <div className="page-header">
           <div>
-            <div className="text-[17px] font-bold text-white">Timeline</div>
+            <div className="text-[17px] font-bold text-white">{t("timeline_page_title")}</div>
             <div className="text-[11px] text-ink-muted mt-0.5">
-              {displayPatient.name} · Medical history from Cognee memory
+              {displayPatient.name} · {t("medical_history_from_cognee")}
             </div>
           </div>
-          <button onClick={() => load(patient.id)} disabled={loading}
+          <button onClick={() => patient?.id && load(patient.id)} disabled={loading}
             className="btn-secondary text-[11px]">
-            {loading ? "Loading..." : "Refresh"}
+            {loading ? t("loading") : t("refresh_btn")}
           </button>
         </div>
 
@@ -90,14 +92,14 @@ export default function TimelinePage() {
           {loading && events.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <div className="w-8 h-8 rounded-full border-2 border-teal/20 border-t-teal animate-spin-slow"/>
-              <div className="text-[12px] text-ink-muted">Recalling from Cognee Cloud...</div>
+              <div className="text-[12px] text-ink-muted">{t("recalling_from_cognee_loading")}</div>
             </div>
           )}
 
           {!loading && events.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <div className="text-[14px] text-white">No timeline events yet</div>
-              <div className="text-[12px] text-ink-muted">Upload patient documents to generate timeline</div>
+              <div className="text-[14px] text-white">{t("no_timeline_events_yet")}</div>
+              <div className="text-[12px] text-ink-muted">{t("upload_docs_generate_timeline")}</div>
             </div>
           )}
 

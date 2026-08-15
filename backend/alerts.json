@@ -1,5 +1,38 @@
 [
   {
+    "id": "7062b38c-5330-4cc0-a860-34055201ce6a",
+    "patient_id": "aa512905-9369-499c-a3fc-3469885df14e",
+    "patient_name": "Arjun Nair",
+    "type": "warning",
+    "title": "Stage 1 Essential Hypertension & Elevated BP",
+    "desc": "Blood pressure recorded at 148/92 mmHg with Obesity (BMI 30.8 kg/m\u00b2) and Dyslipidemia (LDL 145 mg/dL). Monitor cardiovascular parameters closely.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-15T01:02:07.180008"
+  },
+  {
+    "id": "7a3d2219-c7e7-48b0-ad86-09ad79e449cb",
+    "patient_id": "aa512905-9369-499c-a3fc-3469885df14e",
+    "patient_name": "Arjun Nair",
+    "type": "warning",
+    "title": "Poorly Controlled Diabetes & Glycemic Risk",
+    "desc": "HbA1c level recorded at 8.1% (poorly controlled). High risk of diabetic complications. Co-prescribed Metformin + Glimepiride increases hypoglycemia risk.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-15T01:02:07.179978"
+  },
+  {
+    "id": "989b0a84-e913-4ef1-ae64-3a164092a87b",
+    "patient_id": "aa512905-9369-499c-a3fc-3469885df14e",
+    "patient_name": "Arjun Nair",
+    "type": "critical",
+    "title": "Severe Penicillin Allergy Contraindication",
+    "desc": "Patient has documented severe allergy to Penicillin & Beta-Lactam antibiotics. Avoid prescribing Amoxicillin, Ampicillin, or Penicillin derivatives.",
+    "source": "upload",
+    "read": false,
+    "created_at": "2026-08-15T01:02:07.179923"
+  },
+  {
     "id": "460a7484-55a0-4fae-b148-fa2fa8b8bf61",
     "patient_id": "fb94b189-47e9-4a7c-be78-08ba90ffdd6d",
     "patient_name": "Arjun Nair",

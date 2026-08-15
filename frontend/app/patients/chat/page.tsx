@@ -2,18 +2,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import { IconSend, IconDatabase, IconFileText, IconStethoscope } from "@/components/Icons";
 import { api } from "@/lib/api";
 import ExplainabilityPanel from "@/components/ExplainabilityPanel";
 
 type Msg = { from: "doc" | "ai"; text: string; sources?: string[]; explainability?: any };
-
-const QUICK = [
-  "Is it safe to prescribe Ibuprofen?",
-  "What are the current medications?",
-  "Any drug conflicts?",
-  "Summarize patient history",
-];
 
 function formatMessage(text: string): string {
   return text.trim();
@@ -50,12 +44,20 @@ function MessageText({ text }: { text: string }) {
 
 export default function ChatPage() {
   const router = useRouter();
+  const { t, lang } = useTranslation();
   const [patient, setPatient] = useState<any>(null);
   const [msgs,    setMsgs]    = useState<Msg[]>([]);
   const [input,   setInput]   = useState("");
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const QUICK = [
+    t("quick_q_ibuprofen"),
+    t("quick_q_meds"),
+    t("quick_q_conflicts"),
+    t("quick_q_summary"),
+  ];
 
   useEffect(() => {
     const init = async () => {
@@ -122,7 +124,12 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const data = await api.chat(patient.id, q);
+      // Append language context if not English so AI responds in selected language
+      const queryWithLang = lang !== "en"
+        ? `[Please respond in ${lang === "hi" ? "Hindi (हिन्दी)" : "Tamil (தமிழ்)"}] ${q}`
+        : q;
+
+      const data = await api.chat(patient.id, queryWithLang);
       setMsgs(m => [...m, {
         from:    "ai",
         text:    data.answer,
@@ -165,7 +172,7 @@ export default function ChatPage() {
               <span className="text-[12px] font-bold text-teal">{initials}</span>
             </div>
             <div>
-              <div className="text-[14px] font-semibold text-white">{displayPatient.name} — AI Doctor</div>
+              <div className="text-[14px] font-semibold text-white">{displayPatient.name} — {t("ai_doctor_chat_title")}</div>
               <div className="text-[10px] text-ink-muted">{displayPatient.age} yrs · {displayPatient.gender}</div>
             </div>
           </div>
@@ -173,13 +180,13 @@ export default function ChatPage() {
             <div className="flex items-center gap-2 bg-teal-dark border border-teal/25 rounded-lg px-3 py-1.5">
               <span className="w-2 h-2 rounded-full bg-teal animate-pulse flex-shrink-0" />
               <span className="text-[11px] font-medium text-teal">
-                Cognee memory active · {displayPatient.docs?.length || 0} docs
+                {t("cognee_memory_active_docs")} · {displayPatient.docs?.length || 0} {t("stat_documents")}
               </span>
             </div>
             {msgs.length > 0 && (
               <button onClick={clearHistory}
                 className="btn-ghost text-[11px] px-3 py-1.5 text-ink-muted hover:text-rose">
-                Clear
+                {t("clear_chat_history")}
               </button>
             )}
           </div>
@@ -193,7 +200,7 @@ export default function ChatPage() {
 
         {(displayPatient.docs?.length || 0) === 0 && (
           <div className="mx-5 mt-3 bg-amber-dark border border-amber/30 rounded-xl px-4 py-3 text-[12px] text-amber">
-            No documents uploaded yet. Please upload patient records first.
+            {t("no_docs_uploaded_warning")}
           </div>
         )}
 
@@ -205,8 +212,8 @@ export default function ChatPage() {
 
               {msgs.length === 0 && (
                 <div className="text-center py-16 text-ink-muted">
-                  <div className="text-[14px] mb-2 text-white">Ask anything about {displayPatient.name}</div>
-                  <div className="text-[12px]">Powered by Cognee Cloud knowledge graph</div>
+                  <div className="text-[14px] mb-2 text-white">{t("ask_anything_about_patient")} {displayPatient.name}</div>
+                  <div className="text-[12px]">{t("powered_by_cognee_kg")}</div>
                 </div>
               )}
 
@@ -251,7 +258,7 @@ export default function ChatPage() {
                         </div>
                         <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-teal/80 bg-[#001f17] border border-teal/20 rounded px-2.5 py-1 w-fit">
                           <IconDatabase size={10} className="text-teal flex-shrink-0" />
-                          <span>Source: graph</span>
+                          <span>{t("source_graph_label")}</span>
                         </div>
                       </>
                     )}
@@ -300,7 +307,7 @@ export default function ChatPage() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && send()}
-                placeholder={`Ask about ${displayPatient.name}'s health history...`}
+                placeholder={`${t("ask_about_health")}`}
                 disabled={loading}
                 className="flex-1 bg-bg-input border border-line-strong rounded-xl px-4 py-2.5 text-[13px] text-white placeholder:text-ink-muted outline-none focus:border-teal/40 transition-all"
               />
@@ -313,7 +320,7 @@ export default function ChatPage() {
           {/* Right panel — docs */}
           <div className="w-[180px] bg-bg-input border-l border-line flex flex-col flex-shrink-0 overflow-y-auto">
             <div className="px-3 pt-3 pb-2 border-b border-line">
-              <div className="text-[9px] font-bold text-ink-muted uppercase tracking-widest">Patient docs</div>
+              <div className="text-[9px] font-bold text-ink-muted uppercase tracking-widest">{t("patient_docs_sidebar")}</div>
             </div>
             <div className="px-3 py-2 flex flex-col gap-1.5">
               {(displayPatient.docs?.length || 0) > 0 ? displayPatient.docs.map((doc: any, i: number) => (
@@ -323,11 +330,11 @@ export default function ChatPage() {
                     <div className="text-[11px] font-medium text-white leading-tight" style={{ wordBreak:"break-all" }}>
                       {doc.name?.slice(0, 20)}{doc.name?.length > 20 ? "..." : ""}
                     </div>
-                    <div className="text-[10px] text-ink-muted mt-0.5">{doc.chunks} chunks</div>
+                    <div className="text-[10px] text-ink-muted mt-0.5">{doc.chunks} {t("stat_chunks")}</div>
                   </div>
                 </div>
               )) : (
-                <div className="text-[11px] text-ink-muted text-center py-4">No docs yet</div>
+                <div className="text-[11px] text-ink-muted text-center py-4">{t("no_docs_yet_sidebar")}</div>
               )}
             </div>
           </div>

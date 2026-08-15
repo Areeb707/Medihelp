@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ─── Base ─────────────────────────────────────────────── */
 @layer base {
@@ -25,6 +25,16 @@
   input, textarea, select { outline: none; background: transparent; border: none; color: inherit; font-family: inherit; }
   input::placeholder, textarea::placeholder { color: #4a6080; }
   select option { background: #0b0f1a; }
+
+  /* Prevent Chrome/Edge browser autofill yellow/white background override */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #06080f inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
 /* ─── Component layer ───────────────────────────────────── */
@@ -35,7 +45,7 @@
   .main       { @apply flex-1 flex flex-col overflow-hidden; }
 
   /* Sidebar */
-  .sb         { @apply w-[200px] bg-bg-surface border-r border-line flex flex-col flex-shrink-0 h-screen overflow-hidden; }
+  .sb         { @apply w-[220px] bg-bg-surface border-r border-line flex flex-col flex-shrink-0 h-screen overflow-hidden; }
   .sb-logo    { @apply flex items-center gap-2.5 px-4 py-4 border-b border-line; }
   .sb-link    {
     @apply flex items-center gap-2.5 px-4 py-2.5 text-ink-muted text-[12px] font-medium
@@ -161,3 +171,77 @@
 .main-area  { @apply main; }
 .page-header{ @apply ph; }
 .page-content{ @apply pc; }
+
+/* Custom Scrollbar / Slidebar for FAQ Question List */
+.custom-faq-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-faq-scroll::-webkit-scrollbar-track {
+  background: rgba(12, 17, 32, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.custom-faq-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00d4a0 0%, #007a5e 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 212, 160, 0.4);
+}
+.custom-faq-scroll::-webkit-scrollbar-thumb:hover {
+  background: #00f0b5;
+}
+
+/* ─── Dynamic Moving Ambient Emerald Light Field Keyframes ─── */
+@keyframes ambient-primary-breath {
+  0%, 100% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.85;
+  }
+  33% {
+    transform: scale(1.15) translate(-45px, 25px);
+    opacity: 1;
+  }
+  66% {
+    transform: scale(0.95) translate(30px, -20px);
+    opacity: 0.90;
+  }
+}
+
+@keyframes ambient-secondary-breath {
+  0%, 100% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.20) translate(50px, -35px);
+    opacity: 0.95;
+  }
+}
+
+@keyframes ambient-tertiary-breath {
+  0%, 100% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.70;
+  }
+  50% {
+    transform: scale(1.12) translate(-35px, -25px);
+    opacity: 0.90;
+  }
+}
+
+.ambient-glow-1 {
+  animation: ambient-primary-breath 14s ease-in-out infinite;
+}
+.ambient-glow-2 {
+  animation: ambient-secondary-breath 20s ease-in-out infinite;
+}
+.ambient-glow-3 {
+  animation: ambient-tertiary-breath 16s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow-1,
+  .ambient-glow-2,
+  .ambient-glow-3 {
+    animation: none !important;
+  }
+}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import { CogneePill, SectionLabel, Badge } from "@/components/ui";
 import {
   IconUpload, IconFileText, IconCloud, IconNetwork, IconAlertTriangle,
@@ -12,6 +13,7 @@ import { cacheClearPatient } from "@/lib/cache";
 
 export default function UploadPage() {
   const router = useRouter();
+  const { t }    = useTranslation();
 
   const [patient,     setPatient]     = useState<any>(null);
   const [allPatients, setAllPatients] = useState<any[]>([]);
@@ -61,7 +63,6 @@ export default function UploadPage() {
       }
 
       if (p) {
-        // Find latest version from list or server
         const fresh = list.find((x: any) => x.id === p.id) || p;
         setPatient(fresh);
         setDocs(fresh.docs || []);
@@ -103,7 +104,7 @@ export default function UploadPage() {
       setModal(false);
       setNewName("");
     } catch (e: any) {
-      setError("Failed to create patient: " + e.message);
+      setError(e.message);
     } finally {
       setCreating(false);
     }
@@ -111,7 +112,7 @@ export default function UploadPage() {
 
   const handleFile = async (file: File) => {
     if (!file.name.toLowerCase().endsWith(".pdf")) {
-      setError("Only PDF files supported"); return;
+      setError(t("only_pdf_supported")); return;
     }
     setError("");
 
@@ -129,22 +130,20 @@ export default function UploadPage() {
       await api.uploadDoc(targetPatient.id, file);
 
       setProgress(100);
-      setPhase("Uploaded successfully! Building knowledge graph in background.");
+      setPhase("Uploaded successfully!");
 
-      // Refresh patient data and clear stale memory caches
       cacheClearPatient(targetPatient.id);
       const updated = await api.getPatient(targetPatient.id);
       localStorage.setItem("medhelp_active_patient", JSON.stringify(updated));
       setPatient(updated);
       setDocs(updated.docs || []);
 
-      // Refresh list
       const listRes = await api.listPatients();
       setAllPatients(listRes.patients || []);
 
       setTimeout(() => { setUploading(false); setProgress(0); setPhase(""); }, 2000);
     } catch (e: any) {
-      setError(e.message || "Upload failed. Please try again.");
+      setError(e.message || t("upload_failed_try_again"));
       setUploading(false); setProgress(0); setPhase("");
     }
   };
@@ -161,7 +160,7 @@ export default function UploadPage() {
     e.target.value = "";
   };
 
-  const displayPatientName = patient?.name || "Select a patient";
+  const displayPatientName = patient?.name || t("no_patient_selected_upload");
   const totalChunks = docs.reduce((s: number, d: any) => s + (d.chunks || 0), 0);
   const totalSize   = docs.reduce((s: number, d: any) => {
     const mb = parseFloat(d.size?.replace("MB","") || "0");
@@ -174,9 +173,9 @@ export default function UploadPage() {
       <main className="main-area">
         <div className="page-header">
           <div>
-            <div className="text-[17px] font-bold text-white">Upload Documents</div>
+            <div className="text-[17px] font-bold text-white">{t("upload_docs_title")}</div>
             <div className="text-[11px] text-ink-muted mt-0.5">
-              Target Patient: <strong className="text-teal">{displayPatientName}</strong> · Add records to Cognee Cloud memory
+              {t("target_patient_label")} <strong className="text-teal">{displayPatientName}</strong> · {t("add_records_cognee_note")}
             </div>
           </div>
           <CogneePill />
@@ -198,9 +197,9 @@ export default function UploadPage() {
                 <IconUser size={18} />
               </div>
               <div>
-                <div className="text-[10px] text-ink-muted uppercase tracking-widest">Selected Target Patient</div>
+                <div className="text-[10px] text-ink-muted uppercase tracking-widest">{t("selected_target_patient_title")}</div>
                 <div className="text-[14px] font-semibold text-white">
-                  {patient ? `${patient.name} (${patient.age} yrs · ${patient.gender})` : "No patient selected"}
+                  {patient ? `${patient.name} (${patient.age} yrs · ${patient.gender})` : t("no_patient_selected_upload")}
                 </div>
               </div>
             </div>
@@ -211,7 +210,7 @@ export default function UploadPage() {
                 onChange={e => changePatient(e.target.value)}
                 className="bg-bg-input border border-line-strong rounded-xl px-3 py-2 text-[12px] text-white cursor-pointer outline-none focus:border-teal/50"
               >
-                {allPatients.length === 0 && <option value="">No patients found</option>}
+                {allPatients.length === 0 && <option value="">{t("no_patients_found")}</option>}
                 {allPatients.map(p => (
                   <option key={p.id} value={p.id}>
                     {p.name} ({p.age} yrs, {p.gender})
@@ -220,7 +219,7 @@ export default function UploadPage() {
               </select>
 
               <button onClick={() => setModal(true)} className="btn-secondary py-2 text-[12px]">
-                <IconPlus size={13} /> New Patient
+                <IconPlus size={13} /> {t("new_patient_btn")}
               </button>
             </div>
           </div>
@@ -242,23 +241,26 @@ export default function UploadPage() {
                   <IconCloud size={26} className="text-teal" />
                 </div>
                 <div className="text-[16px] font-semibold text-white mb-1">
-                  {uploading ? "Processing..." : `Drop PDF for ${displayPatientName}`}
+                  {uploading ? t("processing_upload") : `${t("drop_pdf_title")} ${displayPatientName}`}
                 </div>
                 <p className="text-[12px] text-ink-muted mb-5 leading-relaxed">
-                  Lab reports, prescriptions,<br />discharge summaries, scan reports
+                  {t("upload_pdf_types")}
                 </p>
                 {!uploading && (
                   <div className="btn-primary mx-auto pointer-events-none">
-                    <IconUpload size={13} /> Browse files
+                    <IconUpload size={13} /> {t("browse_files_btn")}
                   </div>
                 )}
-                <p className="text-[10px] text-ink-muted mt-3">PDF files only · Max 50MB</p>
+                <p className="text-[10px] text-ink-muted mt-3">{t("pdf_only_max_50mb")}</p>
+                <div className="mt-3 pt-3 border-t border-line/50 text-[10px] text-teal/80 bg-teal/5 p-2 rounded-lg">
+                  💡 <strong>{t("pdf_first_tip_title")}</strong> {t("pdf_first_tip_desc")}
+                </div>
               </label>
 
               {/* Progress card */}
               {uploading && (
                 <div className="card animate-fade-in">
-                  <SectionLabel>Upload in progress</SectionLabel>
+                  <SectionLabel>{t("upload_in_progress_title")}</SectionLabel>
                   <div className="flex justify-between items-center mb-2">
                     <div className="text-[12px] text-ink-muted">{phase}</div>
                     <span className="text-[13px] font-bold text-teal">
@@ -273,7 +275,7 @@ export default function UploadPage() {
                   </div>
                   <div className="text-[10px] text-ink-muted mt-2 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse flex-shrink-0" />
-                    Ingesting into Cognee dataset: patient_{patient?.id?.slice(0,8)}
+                    {t("ingesting_into_cognee")} patient_{patient?.id?.slice(0,8)}
                   </div>
                 </div>
               )}
@@ -282,14 +284,14 @@ export default function UploadPage() {
               <div className="rounded-2xl p-4 border" style={{ background: "#130f2e", borderColor: "#8b7ff530" }}>
                 <div className="flex items-center gap-2 mb-3">
                   <IconNetwork size={13} className="text-violet" />
-                  <span className="text-[11px] font-semibold text-violet">Cognee Cloud — memory status</span>
+                  <span className="text-[11px] font-semibold text-violet">{t("cognee_memory_status_title")}</span>
                 </div>
                 {[
-                  ["Target Patient",       patient?.name || "None",                        "#ffffff"],
-                  ["Documents ingested",   docs.length,                                    "#00d4a0"],
-                  ["Total chunks",         totalChunks,                                    "#8b7ff5"],
-                  ["Knowledge graph",      totalChunks > 0 ? "Active" : "Empty",           "#00d4a0"],
-                  ["Total size",           totalSize > 0 ? `${totalSize.toFixed(2)} MB` : "—", "#4090e0"],
+                  [t("target_patient_label").replace(":",""), patient?.name || "None",                        "#ffffff"],
+                  [t("stat_docs_ingested"),                 docs.length,                                    "#00d4a0"],
+                  [t("total_chunks_label"),                 totalChunks,                                    "#8b7ff5"],
+                  [t("mindmap_title"),                      totalChunks > 0 ? t("connected_word") : "Empty","#00d4a0"],
+                  [t("total_size_label"),                   totalSize > 0 ? `${totalSize.toFixed(2)} MB` : "—", "#4090e0"],
                 ].map(([k, v, c]) => (
                   <div key={String(k)} className="flex justify-between py-2 border-b last:border-0"
                     style={{ borderColor: "#2a2060" }}>
@@ -299,7 +301,7 @@ export default function UploadPage() {
                 ))}
                 <a href="https://platform.cognee.ai/sessions" target="_blank" rel="noreferrer"
                   className="btn-violet w-full mt-3 justify-center text-[12px] no-underline">
-                  <IconNetwork size={13} /> View sessions in Cognee Cloud
+                  <IconNetwork size={13} /> {t("view_sessions_in_cognee")}
                 </a>
               </div>
             </div>
@@ -307,16 +309,16 @@ export default function UploadPage() {
             {/* ── RIGHT ────────────────────────── */}
             <div className="card flex flex-col">
               <div className="flex items-center justify-between mb-4">
-                <SectionLabel>Ingested documents ({displayPatientName})</SectionLabel>
-                <span className="badge badge-teal">{docs.length} in memory</span>
+                <SectionLabel>{t("ingested_docs_for")} ({displayPatientName})</SectionLabel>
+                <span className="badge badge-teal">{docs.length} {t("in_memory_badge")}</span>
               </div>
 
               {docs.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-center py-10">
                   <div>
                     <IconFileText size={32} className="text-ink-muted mx-auto mb-2" />
-                    <div className="text-[12px] text-ink-muted">No documents yet for {displayPatientName}</div>
-                    <div className="text-[11px] text-ink-muted mt-1">Upload a PDF to build their memory graph</div>
+                    <div className="text-[12px] text-ink-muted">{t("no_docs_yet_for")} {displayPatientName}</div>
+                    <div className="text-[11px] text-ink-muted mt-1">{t("upload_pdf_build_graph")}</div>
                   </div>
                 </div>
               ) : (
@@ -329,10 +331,10 @@ export default function UploadPage() {
                       <div className="flex-1 min-w-0">
                         <div className="text-[12px] font-medium text-white truncate">{doc.name}</div>
                         <div className="text-[10px] text-ink-muted mt-0.5">
-                          {doc.uploaded_at?.split("T")[0] || "—"} · {doc.chunks} chunks · {doc.size}
+                          {doc.uploaded_at?.split("T")[0] || "—"} · {doc.chunks} {t("stat_chunks")} · {doc.size}
                         </div>
                       </div>
-                      <Badge label="Ingested" variant="teal" />
+                      <Badge label={t("in_memory_badge")} variant="teal" />
                     </div>
                   ))}
                 </div>
@@ -341,9 +343,9 @@ export default function UploadPage() {
               {docs.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-line flex-shrink-0">
                   {[
-                    ["Total chunks",  totalChunks],
-                    ["Documents",     docs.length],
-                    ["Total size",    totalSize > 0 ? `${totalSize.toFixed(1)}MB` : "—"],
+                    [t("total_chunks_label"),  totalChunks],
+                    [t("stat_documents"),     docs.length],
+                    [t("total_size_label"),    totalSize > 0 ? `${totalSize.toFixed(1)}MB` : "—"],
                   ].map(([k, v]) => (
                     <div key={String(k)} className="bg-bg-input rounded-xl p-2.5 text-center">
                       <div className="text-[15px] font-bold text-teal">{v}</div>
@@ -367,46 +369,48 @@ export default function UploadPage() {
             style={{ background:"#0c1018" }} onClick={e=>e.stopPropagation()}>
             <div className="flex items-center justify-between mb-5">
               <div>
-                <div className="text-[15px] font-semibold text-white">Create Patient Record</div>
-                <div className="text-[11px] text-ink-muted mt-0.5">Create record to attach uploaded documents</div>
+                <div className="text-[15px] font-semibold text-white">{t("create_patient_record_title")}</div>
+                <div className="text-[11px] text-ink-muted mt-0.5">{t("create_record_attach_desc")}</div>
               </div>
               <button onClick={()=>setModal(false)} className="btn-ghost p-1.5 rounded-lg"><IconX size={16} /></button>
             </div>
             <div className="flex flex-col gap-3">
               <div>
-                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Full name</label>
+                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("full_name_label")}</label>
                 <div className="flex items-center gap-2.5 bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 focus-within:border-teal/50 transition-all">
                   <IconUser size={14} className="text-ink-muted flex-shrink-0" />
                   <input value={newName} onChange={e=>setNewName(e.target.value)}
-                    placeholder="e.g. Ananya Shah" className="flex-1 text-[13px] text-white" />
+                    placeholder="e.g. Ananya Shah" className="flex-1 text-[13px] text-white bg-transparent border-none outline-none" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Age</label>
+                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("age_label")}</label>
                   <input value={newAge} onChange={e=>setNewAge(e.target.value)} placeholder="42" type="number"
-                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white" />
+                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white outline-none" />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Gender</label>
+                  <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("gender_label")}</label>
                   <select value={newGender} onChange={e=>setNewGender(e.target.value)}
-                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer">
-                    {["Female","Male","Other"].map(g=><option key={g}>{g}</option>)}
+                    className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer outline-none">
+                    <option value="Female">{t("gender_female")}</option>
+                    <option value="Male">{t("gender_male")}</option>
+                    <option value="Other">{t("gender_other")}</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">Blood group</label>
+                <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">{t("blood_group_label")}</label>
                 <select value={newBlood} onChange={e=>setNewBlood(e.target.value)}
-                  className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer">
+                  className="w-full bg-bg-input border border-line-strong rounded-xl px-3 py-2.5 text-[13px] text-white cursor-pointer outline-none">
                   {["B+","A+","A-","B-","O+","O-","AB+","AB-"].map(b=><option key={b}>{b}</option>)}
                 </select>
               </div>
               <div className="flex gap-2 mt-1">
-                <button onClick={()=>setModal(false)} className="btn-secondary flex-1 justify-center py-2.5">Cancel</button>
+                <button onClick={()=>setModal(false)} className="btn-secondary flex-1 justify-center py-2.5">{t("cancel")}</button>
                 <button onClick={handleCreatePatient} disabled={creating}
                   className="btn-primary flex-1 justify-center py-2.5">
-                  {creating ? "Creating..." : "Create & Select Patient"}
+                  {creating ? t("creating_patient_btn") : t("create_and_select_btn")}
                 </button>
               </div>
             </div>

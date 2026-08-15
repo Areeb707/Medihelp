@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   IconKey, IconShield, IconCheck, IconNetwork,
   IconActivity, IconTrash, IconEye, IconUser,
@@ -9,6 +10,7 @@ import {
 import { api } from "@/lib/api";
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   const [status,   setStatus]   = useState<any>(null);
   const [loading,  setLoading]  = useState(true);
   const [saving,   setSaving]   = useState(false);
@@ -24,7 +26,7 @@ export default function SettingsPage() {
   const [cogneeKey, setCogneeKey] = useState("");
   const [cogneeUrl, setCogneeUrl] = useState("");
 
-  // LLM fields — simple 3 inputs
+  // LLM fields
   const [provider, setProvider] = useState("groq");
   const [model,    setModel]    = useState("");
   const [llmKey,   setLlmKey]   = useState("");
@@ -116,11 +118,11 @@ export default function SettingsPage() {
       <main className="main-area">
         <div className="page-header">
           <div>
-            <div className="text-[17px] font-bold text-white">Settings</div>
-            <div className="text-[11px] text-ink-muted mt-0.5">Configure your Cognee Cloud and AI model</div>
+            <div className="text-[17px] font-bold text-white">{t("settings_page_title")}</div>
+            <div className="text-[11px] text-ink-muted mt-0.5">{t("settings_subtitle")}</div>
           </div>
           <button onClick={saveKeys} disabled={saving} className="btn-primary">
-            {saved ? <><IconCheck size={13}/> Saved!</> : saving ? "Saving..." : "Save changes"}
+            {saved ? <><IconCheck size={13}/> {t("saved_badge")}</> : saving ? t("saving") : t("save_changes_btn")}
           </button>
         </div>
 
@@ -137,10 +139,10 @@ export default function SettingsPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-semibold" style={{ color:cogneeOk?"#00d4a0":"#e05a3a" }}>
-                    Cognee Cloud — {cogneeOk?"Connected":"Not connected"}
+                    {t("cognee_cloud_status_title")} {cogneeOk?t("connected_word"):t("not_connected_word")}
                   </div>
                   <div className="text-[10px] text-ink-muted mt-0.5">
-                    {cogneeOk?"Knowledge graph active":"Enter API key below"}
+                    {cogneeOk?t("kg_active_subtitle"):t("enter_api_key_below")}
                   </div>
                 </div>
               </div>
@@ -154,10 +156,10 @@ export default function SettingsPage() {
                   <div className="text-[11px] font-semibold" style={{ color:llmOk?"#8b7ff5":"#e05a3a" }}>
                     {status?.llm?.provider
                       ? status.llm.provider.charAt(0).toUpperCase()+status.llm.provider.slice(1)
-                      : "LLM"} — {llmOk?"Configured":"Not configured"}
+                      : "LLM"} — {llmOk?t("configured_word"):t("not_configured_word")}
                   </div>
                   <div className="text-[10px] text-ink-muted mt-0.5">
-                    {status?.llm?.model || "No model selected"}
+                    {status?.llm?.model || t("no_model_selected_subtitle")}
                   </div>
                 </div>
               </div>
@@ -171,17 +173,17 @@ export default function SettingsPage() {
                   <IconNetwork size={16} color="#00d4a0"/>
                 </div>
                 <div className="flex-1">
-                  <div className="text-[13px] font-semibold text-white">Cognee Cloud</div>
-                  <div className="text-[10px] text-ink-muted">Memory and knowledge graph provider</div>
+                  <div className="text-[13px] font-semibold text-white">{t("cognee_cloud_card_title")}</div>
+                  <div className="text-[10px] text-ink-muted">{t("memory_kg_provider_desc")}</div>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={testConnection} disabled={testing}
                     className="btn-secondary text-[11px] flex items-center gap-1.5">
                     <IconRefresh size={12} className={testing?"animate-spin-slow":""}/>
-                    {testing?"Testing...":testOk===true?"✓ Connected!":testOk===false?"✗ Failed":"Test"}
+                    {testing ? t("testing_btn") : testOk===true ? t("test_connected_msg") : testOk===false ? t("test_failed_msg") : t("test_btn")}
                   </button>
                   <a href="https://platform.cognee.ai/sessions" target="_blank" rel="noreferrer"
-                    className="btn-secondary text-[11px] no-underline">Sessions ↗</a>
+                    className="btn-secondary text-[11px] no-underline">{t("sessions_link")}</a>
                 </div>
               </div>
 
@@ -189,16 +191,16 @@ export default function SettingsPage() {
                 {/* Cognee API Key */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">Cognee API Key</label>
+                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">{t("cognee_api_key_label")}</label>
                     <a href="https://platform.cognee.ai/apiKeys" target="_blank" rel="noreferrer"
-                      className="text-[10px] text-teal hover:underline">Get from platform.cognee.ai ↗</a>
+                      className="text-[10px] text-teal hover:underline">{t("get_from_platform_link")}</a>
                   </div>
                   <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                     <IconKey size={14} className="text-ink-muted flex-shrink-0"/>
                     <input type={showCogneeKey?"text":"password"} value={cogneeKey}
                       onChange={e=>setCogneeKey(e.target.value)}
                       placeholder={status?.cognee_cloud?.has_key?"••••••••••••••• (saved)":"ck_your_key_here"}
-                      className="flex-1 text-[13px] text-white font-mono"/>
+                      className="flex-1 text-[13px] text-white font-mono bg-transparent outline-none border-none"/>
                     <button onClick={()=>setShowCogneeKey(s=>!s)}
                       className="text-ink-muted hover:text-white transition-all">
                       <IconEye size={14}/>
@@ -209,15 +211,15 @@ export default function SettingsPage() {
                 {/* Cognee Base URL */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">Cognee Base URL</label>
-                    <span className="text-[10px] text-ink-muted">Copy from browser when logged into Cognee Cloud</span>
+                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">{t("cognee_base_url_label")}</label>
+                    <span className="text-[10px] text-ink-muted">{t("copy_from_browser_desc")}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                     <IconNetwork size={14} className="text-ink-muted flex-shrink-0"/>
                     <input type="text" value={cogneeUrl}
                       onChange={e=>setCogneeUrl(e.target.value)}
                       placeholder="https://tenant-xxx.aws.cognee.ai"
-                      className="flex-1 text-[13px] text-white font-mono"/>
+                      className="flex-1 text-[13px] text-white font-mono bg-transparent outline-none border-none"/>
                   </div>
                 </div>
               </div>
@@ -231,8 +233,8 @@ export default function SettingsPage() {
                   <IconZap size={16} color="#8b7ff5"/>
                 </div>
                 <div className="flex-1">
-                  <div className="text-[13px] font-semibold text-white">AI Model</div>
-                  <div className="text-[10px] text-ink-muted">Generates answers from Cognee recalled memory</div>
+                  <div className="text-[13px] font-semibold text-white">{t("ai_model_card_title")}</div>
+                  <div className="text-[10px] text-ink-muted">{t("generates_answers_desc")}</div>
                 </div>
                 {llmOk && (
                   <span className="text-[10px] font-semibold text-violet bg-violet-dark border border-violet/25 px-2.5 py-1 rounded-full">
@@ -245,42 +247,42 @@ export default function SettingsPage() {
                 {/* Provider */}
                 <div>
                   <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">
-                    LLM Provider
+                    {t("llm_provider_label")}
                   </label>
                   <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                     <IconActivity size={14} className="text-ink-muted flex-shrink-0"/>
                     <input type="text" value={provider}
                       onChange={e=>setProvider(e.target.value.toLowerCase().trim())}
                       placeholder="groq, openai, anthropic, mistral, together, custom"
-                      className="flex-1 text-[13px] text-white"/>
+                      className="flex-1 text-[13px] text-white bg-transparent outline-none border-none"/>
                   </div>
                   <div className="text-[10px] text-ink-muted mt-1.5">
-                    Supported: <span className="text-teal font-mono">groq</span> · <span className="text-teal font-mono">openai</span> · <span className="text-teal font-mono">anthropic</span> · <span className="text-teal font-mono">mistral</span> · <span className="text-teal font-mono">together</span> · <span className="text-teal font-mono">custom</span>
+                    {t("provider_supported_text")}
                   </div>
                 </div>
 
                 {/* Model */}
                 <div>
                   <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">
-                    Model name
+                    {t("model_name_label")}
                   </label>
                   <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                     <IconZap size={14} className="text-ink-muted flex-shrink-0"/>
                     <input type="text" value={model}
                       onChange={e=>setModel(e.target.value.trim())}
                       placeholder="e.g. llama-3.1-8b-instant, gpt-4o-mini, claude-haiku-4-5"
-                      className="flex-1 text-[13px] text-white font-mono"/>
+                      className="flex-1 text-[13px] text-white font-mono bg-transparent outline-none border-none"/>
                   </div>
                   <div className="text-[10px] text-ink-muted mt-1.5">
-                    Enter any model name supported by your provider
+                    {t("enter_supported_model_desc")}
                   </div>
                 </div>
 
                 {/* API Key */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">API Key</label>
-                    <span className="text-[10px] text-ink-muted">From your LLM provider dashboard</span>
+                    <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest">{t("api_key_label")}</label>
+                    <span className="text-[10px] text-ink-muted">{t("from_provider_dashboard_desc")}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                     <IconKey size={14} className="text-ink-muted flex-shrink-0"/>
@@ -290,7 +292,7 @@ export default function SettingsPage() {
                         ? `••••••••••••••• (${status.llm.provider} key saved)`
                         : "Your LLM API key"
                       }
-                      className="flex-1 text-[13px] text-white font-mono"/>
+                      className="flex-1 text-[13px] text-white font-mono bg-transparent outline-none border-none"/>
                     <button onClick={()=>setShowLlmKey(s=>!s)}
                       className="text-ink-muted hover:text-white transition-all">
                       <IconEye size={14}/>
@@ -302,17 +304,17 @@ export default function SettingsPage() {
                 {provider==="custom" && (
                   <div>
                     <label className="text-[10px] font-bold text-ink-muted uppercase tracking-widest block mb-1.5">
-                      Base URL (OpenAI-compatible)
+                      {t("base_url_compat_label")}
                     </label>
                     <div className="flex items-center gap-2 bg-bg-input border border-line-strong rounded-xl px-4 py-3 focus-within:border-teal/50 transition-all">
                       <IconNetwork size={14} className="text-ink-muted flex-shrink-0"/>
                       <input type="text" value={baseUrl}
                         onChange={e=>setBaseUrl(e.target.value)}
                         placeholder="https://your-api-endpoint.com/v1"
-                        className="flex-1 text-[13px] text-white font-mono"/>
+                        className="flex-1 text-[13px] text-white font-mono bg-transparent outline-none border-none"/>
                     </div>
                     <div className="text-[10px] text-ink-muted mt-1.5">
-                      Works with Ollama, LM Studio, vLLM, or any OpenAI-compatible API
+                      {t("openai_compat_desc")}
                     </div>
                   </div>
                 )}
@@ -327,19 +329,19 @@ export default function SettingsPage() {
                   <IconBell size={16} color="#f0a030"/>
                 </div>
                 <div className="flex-1">
-                  <div className="text-[13px] font-semibold text-white">Alert Preferences</div>
-                  <div className="text-[10px] text-ink-muted">Controls what Cognee scans for during PDF upload</div>
+                  <div className="text-[13px] font-semibold text-white">{t("alert_prefs_card_title")}</div>
+                  <div className="text-[10px] text-ink-muted">{t("controls_cognee_scan_desc")}</div>
                 </div>
                 <button onClick={saveNotifications} disabled={savingN}
                   className="btn-secondary text-[11px]">
-                  {savedN?<><IconCheck size={12}/> Saved!</>:savingN?"Saving...":"Save prefs"}
+                  {savedN ? <><IconCheck size={12}/> {t("saved_badge")}</> : savingN ? t("saving") : t("save_prefs_btn")}
                 </button>
               </div>
               {[
-                { key:"drug_alerts", label:"Drug interaction warnings",  sub:"Scan for drug conflicts and allergy risks"    },
-                { key:"bp_alerts",   label:"BP and vitals alerts",       sub:"Scan for blood pressure and vitals warnings" },
-                { key:"lab_alerts",  label:"Lab result notifications",   sub:"Scan for abnormal lab values and HbA1c"      },
-                { key:"followup",    label:"Follow-up reminders",        sub:"Flag patients requiring follow-up visits"    },
+                { key:"drug_alerts", label:t("drug_alerts_label"),  sub:t("drug_alerts_sub")    },
+                { key:"bp_alerts",   label:t("bp_alerts_label"),    sub:t("bp_alerts_sub") },
+                { key:"lab_alerts",  label:t("lab_alerts_label"),   sub:t("lab_alerts_sub")      },
+                { key:"followup",    label:t("followup_alerts_label"), sub:t("followup_alerts_sub")    },
               ].map((s,i,arr) => (
                 <div key={s.key}
                   className={`flex items-center justify-between py-3 gap-4 ${i<arr.length-1?"border-b border-line":""}`}>
@@ -373,34 +375,34 @@ export default function SettingsPage() {
                   <IconUser size={16} color="#e2eaf4"/>
                 </div>
                 <div>
-                  <div className="text-[13px] font-semibold text-white">Account</div>
-                  <div className="text-[10px] text-ink-muted">Manage your session and data</div>
+                  <div className="text-[13px] font-semibold text-white">{t("account_card_title")}</div>
+                  <div className="text-[10px] text-ink-muted">{t("manage_session_data_desc")}</div>
                 </div>
               </div>
               <div className="flex items-center justify-between py-3 border-b border-line">
                 <div>
-                  <div className="text-[12px] font-medium text-white">Delete all patient memory</div>
-                  <div className="text-[10px] text-ink-muted mt-0.5">Permanently removes all data from Cognee Cloud</div>
+                  <div className="text-[12px] font-medium text-white">{t("delete_all_memory_label")}</div>
+                  <div className="text-[10px] text-ink-muted mt-0.5">{t("permanently_removes_desc")}</div>
                 </div>
                 <button
                   onClick={()=>{ if(confirm("Delete ALL patient memory? Cannot be undone.")) alert("Delete individual patients from the Patients page."); }}
                   className="text-[11px] font-medium px-3 py-1.5 rounded-lg border cursor-pointer flex items-center gap-1.5 bg-rose-dark border-rose/30 text-rose hover:bg-rose/10 transition-all">
-                  <IconTrash size={12}/> Delete all
+                  <IconTrash size={12}/> {t("delete_all_btn")}
                 </button>
               </div>
               <div className="flex items-center justify-between py-3">
                 <div>
-                  <div className="text-[12px] font-medium text-white">Sign out</div>
-                  <div className="text-[10px] text-ink-muted mt-0.5">Clears session and returns to login</div>
+                  <div className="text-[12px] font-medium text-white">{t("sign_out_label")}</div>
+                  <div className="text-[10px] text-ink-muted mt-0.5">{t("clears_session_desc")}</div>
                 </div>
                 <button
                   onClick={()=>{ localStorage.removeItem("medhelp_doctor"); localStorage.removeItem("medhelp_active_patient"); window.location.href="/login"; }}
-                  className="btn-secondary text-[11px]">Sign out</button>
+                  className="btn-secondary text-[11px]">{t("sign_out_label")}</button>
               </div>
             </div>
 
             <div className="text-center py-2 text-[10px] text-ink-muted">
-              Medhelp AI · v1.0.0 · WeMakeDevs × Cognee Hackathon
+              {t("hackathon_footer_text")}
             </div>
 
           </div>

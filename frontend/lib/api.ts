@@ -83,4 +83,15 @@ export const api = {
   saveKeys:          (d: any) => req<any>("POST", "/settings/keys", d),
   getNotifications:  ()       => req<any>("GET",  "/settings/notifications"),
   saveNotifications: (d: any) => req<any>("POST", "/settings/notifications", d),
+
+  // Voice & Guidance
+  tts: (text: string, voice_id?: string) => {
+    return fetch(`${BASE}/voice/tts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice_id: voice_id || "JBFqnCBsd6RMkjVDRZzb" }),
+    });
+  },
+  explainPage: (path: string) => req<any>("POST", "/voice/explain-page", { path }),
 };
+

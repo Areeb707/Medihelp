@@ -179,27 +179,6 @@
     "alerts": 0,
     "created_at": "2026-07-13T17:17:47.698973"
   },
-  "96d732f6-bbe1-4cc7-8e05-2c200c26cade": {
-    "id": "96d732f6-bbe1-4cc7-8e05-2c200c26cade",
-    "name": "rohit",
-    "age": 35,
-    "gender": "Male",
-    "blood": "O+",
-    "doctor": "boiii",
-    "conditions": [],
-    "meds": [],
-    "docs": [
-      {
-        "name": "Rohit_Comprehensive_Lab_Report.pdf",
-        "chunks": 2,
-        "size": "0.0MB",
-        "uploaded_at": "2026-07-13T17:57:22.525801",
-        "status": "ingested"
-      }
-    ],
-    "alerts": 0,
-    "created_at": "2026-07-13T17:57:12.865583"
-  },
   "0e7372c0-cf0c-4be7-badc-fbc786fcca70": {
     "id": "0e7372c0-cf0c-4be7-badc-fbc786fcca70",
     "name": "rohith",
@@ -873,5 +852,120 @@
       },
       "timestamp": "2026-08-14T16:13:46.753333"
     }
+  },
+  "6229fe90-b474-4cfd-95d0-987c33976af2": {
+    "id": "6229fe90-b474-4cfd-95d0-987c33976af2",
+    "name": "Arjun Nair",
+    "age": 52,
+    "gender": "Male",
+    "blood": "B+",
+    "doctor": "bublu",
+    "conditions": [],
+    "meds": [],
+    "docs": [],
+    "alerts": 0,
+    "created_at": "2026-08-15T00:56:04.678859"
+  },
+  "aa512905-9369-499c-a3fc-3469885df14e": {
+    "id": "aa512905-9369-499c-a3fc-3469885df14e",
+    "name": "Arjun Nair",
+    "age": 52,
+    "gender": "Male",
+    "blood": "B+",
+    "doctor": "boiii",
+    "conditions": [],
+    "meds": [],
+    "docs": [
+      {
+        "name": "medical_report_clear.pdf",
+        "chunks": 2,
+        "size": "0.0MB",
+        "uploaded_at": "2026-08-15T01:02:04.464577",
+        "status": "ingested"
+      }
+    ],
+    "alerts": 3,
+    "created_at": "2026-08-15T01:01:35.471556",
+    "structured_diff": {
+      "diagnoses": {
+        "added": [],
+        "removed": []
+      },
+      "medications": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      },
+      "labs": [
+        {
+          "name": "HbA1c",
+          "old": "8.1%",
+          "new": "8.1%",
+          "trend": "stable"
+        },
+        {
+          "name": "Blood Pressure",
+          "old": "148/92 mmHg",
+          "new": "148/92 mmHg",
+          "trend": "stable"
+        },
+        {
+          "name": "LDL-C",
+          "old": "145 mg/dL",
+          "new": "145 mg/dL",
+          "trend": "stable"
+        },
+        {
+          "name": "BMI",
+          "old": "30.8 kg/m\u00b2",
+          "new": "30.8 kg/m\u00b2",
+          "trend": "stable"
+        },
+        {
+          "name": "Weight",
+          "old": "84 kg",
+          "new": "84 kg",
+          "trend": "stable"
+        }
+      ],
+      "allergies": {
+        "added": [],
+        "removed": []
+      },
+      "procedures": {
+        "added": []
+      },
+      "risk": {
+        "old": "Type 2 Diabetes Mellitus, Essential Hypertension, Obesity, Dyslipidaemia",
+        "new": "Type 2 Diabetes Mellitus, Essential Hypertension, Obesity, Dyslipidaemia"
+      },
+      "timestamp": "2026-08-15T01:02:54.502032"
+    }
+  },
+  "ef44a8a5-739a-4481-a54a-edd6ef2d287c": {
+    "id": "ef44a8a5-739a-4481-a54a-edd6ef2d287c",
+    "name": "nigga",
+    "age": 25,
+    "gender": "Male",
+    "blood": "A+",
+    "doctor": "boiii",
+    "conditions": [],
+    "meds": [],
+    "docs": [],
+    "alerts": 0,
+    "created_at": "2026-08-15T02:12:06.643256"
+  },
+  "23dd964f-619d-4987-93db-c4a716762b6f": {
+    "id": "23dd964f-619d-4987-93db-c4a716762b6f",
+    "name": "Mohanraj M",
+    "age": 19,
+    "gender": "Male",
+    "blood": "B+",
+    "doctor": "dr. alex morgan",
+    "conditions": [],
+    "meds": [],
+    "docs": [],
+    "alerts": 0,
+    "created_at": "2026-08-15T05:15:50.479406"
   }
 }

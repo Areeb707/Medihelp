@@ -37,6 +37,7 @@ from routes.brief    import router as brief_router
 from routes.memory   import router as memory_router
 from routes.alerts   import router as alerts_router
 from routes.settings import router as settings_router
+from routes.voice    import router as voice_router
 
 app = FastAPI(
     title="Medhelp AI Backend",
@@ -60,6 +61,8 @@ app.include_router(brief_router)
 app.include_router(memory_router)
 app.include_router(alerts_router)
 app.include_router(settings_router)
+app.include_router(voice_router)
+
 
 
 @app.on_event("startup")
