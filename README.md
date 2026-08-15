@@ -86,6 +86,35 @@ MedHelp AI includes 5 main views built for everyday clinical workflows:
 
 ---
 
+## 🚀 Recent Production Enhancements & Platform Features
+
+The platform has been updated with production-grade clinical workflow tools:
+
+### 1. 🔐 Industry-Standard Authentication Architecture (`/login` & `/signup`)
+- **Streamlined Login Portal**: Single-purpose login requiring strictly Email and Password credentials.
+- **Browser Autofill Security**: Configured `autoComplete="off"` / `autoComplete="new-password"` directives and dark-mode `-webkit-autofill` overrides to block browser password manager interference.
+- **Dynamic Account Persistence**: User registration (`registerDoctor`) persists accounts to `medhelp_registered_users`, automatically retrieving the doctor's actual Name, Specialisation, and session token upon login.
+
+### 2. 🌐 Multilingual Internationalization (i18n) & Language Selector
+- **3-Language Support**: Full localization across **English (en)**, **Tamil (தமிழ் - ta)**, and **Hindi (हिन्दी - hi)**.
+- **Global `LanguageSelector` Dropdown**: Accessible header dropdown triggering custom event listeners (`medhelp_language_changed`) to translate 100% of landing page titles, feature cards, and CTA banners dynamically.
+
+### 3. 🌌 Dynamic Emerald Ambient Background & Sparkling Particle Canvas
+- **Cinematic Ambient Lighting**: GPU-accelerated breathing radial glow keyframes (`ambient-primary-breath`, `ambient-secondary-breath`, `ambient-tertiary-breath`) producing smooth organic movement behind hero content.
+- **HTML5 Canvas Glitter Engine**: Canvas particle layer rendering 45 floating, twinkling bioluminescent glitter points and 4-point star sparkles.
+
+### 4. ♿ Inclusive Web Accessibility Suite (`AccessibilityOverlay`)
+- **Floating Accessibility Toolbar**: Interactive accessibility toolbar providing real-time text font scaling (+ / - / reset), high-contrast mode, link highlighting, font readability toggles, and Web Speech screen reading.
+
+### 5. 🎙️ Voice AI & Assisted Consultation Center (`/assisted` & `/voice/tts`)
+- **Voice Dictation & Audio Synthesis**: Hands-free voice dictation for clinical note-taking paired with backend TTS synthesis endpoints (`/voice/tts`).
+- **Interactive Knowledge FAQ Center (`/faq`)**: Searchable accordion knowledge center covering General Usage, Security & HIPAA alignment, Clinical Workflows, and GraphRAG memory queries.
+
+### 6. ⚡ Vercel Zero-Config Deployment Suite
+- **Monorepo Deployment Manifests**: Root [`package.json`](file:///d:/medic/medhelp/package.json) and [`vercel.json`](file:///d:/medic/medhelp/vercel.json) files configured for zero-config Vercel deployment with Next.js 14 monorepo support and clean [`.gitignore`](file:///d:/medic/medhelp/.gitignore) rules.
+
+---
+
 ## 🖼️ Visual Feature Showcase
 
 <div align="center">
