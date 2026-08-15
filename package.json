@@ -1,14 +1,11 @@
 {
-  "name": "medihelp-monorepo",
+  "name": "medihelp-app",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "frontend"
-  ],
   "scripts": {
-    "dev": "npm run dev --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "start": "npm run start --prefix frontend"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "next": "14.2.5",
